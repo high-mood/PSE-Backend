@@ -1,0 +1,77 @@
+* Mood analysis
+
+** Mood classification
+   De 20 moods uit de GraceNote API opdelen in energy niveaus en
+   posi-/negativiteit. 
+
+   Indeling van 'moods' in categorieen met bepaalde percentages
+   e.g. tussen 9:00-11:00 luister je 60% tender, 20% melancholic, etc. muziek.
+
+   Mogelijk gebruik maken van een 3-tuple met (energy, positivity, bpm) zodat song-recommendation wat makkelijker
+   wordt gemaakt.
+
+
+* Read me 
+***  Random forests,
+***  Spotify API recourses (https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/)
+***  https://github.com/neokt/audio-music-mood-classification
+***  Andere aanpak? Meer online resources
+***  https://github.com/cweichen/pygn
+***  Wachten op bericht van Gracenote over API
+*** 
+
+* Stuff
+
+** Spotify API client ID
+   0813d30bd7ba4fb0aebadd2bd87b175e
+** OAuth Token
+   BQAvltxhcFX1Df5ieXYG6GXfxhI9rsaxabYWIRv-KY9CEpAa9DnVL8vAqottjTItcthZ-F1YrpolSRfj8ql00PjIb8Ofdm4WlpcjtoQmDv40k-judIMNHJYAOf41e4dwh6sZ3DEwEj2pEyrxlSJwTRU
+   E.g. 
+*** curl -X "GET" "https://api.spotify.com/v1/me/player/recently-played?type=track&limit=0&after=1484811043508" -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer BQAvltxhcFX1Df5ieXYG6GXfxhI9rsaxabYWIRv-KY9CEpAa9DnVL8vAqottjTItcthZ-F1YrpolSRfj8ql00PjIb8Ofdm4WlpcjtoQmDv40k-judIMNHJYAOf41e4dwh6sZ3DEwEj2pEyrxlSJwTRU"
+    Gives [[file:test][this result]]. (Last 10 tracks)
+*** curl -X "GET" "https://api.spotify.com/v1/audio-features/3pAodxg6pppHSGadyQcf4M" -H "ccept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer BQAvltxhcFX1Df5ieXYG6GXfxhI9rsaxabYWIRv-KY9CEpAa9DnVL8vAqottjTItcthZ-F1YrpolSRfj8ql00PjIb8Ofdm4WlpcjtoQmDv40k-judIMNHJYAOf41e4dwh6sZ3DEwEj2pEyrxlSJwTRU"
+    Jinsang - Herewego
+{
+  "danceability" : 0.562,
+  "energy" : 0.589,
+  "key" : 8,
+  "loudness" : -9.447,
+  "mode" : 1,
+  "speechiness" : 0.0689,
+  "acousticness" : 0.160,
+  "instrumentalness" : 0.969,
+  "liveness" : 0.241,
+  "valence" : 0.759,
+  "tempo" : 76.584,
+  "type" : "audio_features",
+  "id" : "3pAodxg6pppHSGadyQcf4M",
+  "uri" : "spotify:track:3pAodxg6pppHSGadyQcf4M",
+  "track_href" : "https://api.spotify.com/v1/tracks/3pAodxg6pppHSGadyQcf4M",
+  "analysis_url" : "https://api.spotify.com/v1/audio-analysis/3pAodxg6pppHSGadyQcf4M",
+  "duration_ms" : 136673,
+  "time_signature" : 4
+}
+
+Or: Jinsang - Bliss
+
+
+{
+  "danceability" : 0.588,
+  "energy" : 0.352,
+  "key" : 6,
+  "loudness" : -13.197,
+  "mode" : 0,
+  "speechiness" : 0.0546,
+  "acousticness" : 0.566,
+  "instrumentalness" : 0.924,
+  "liveness" : 0.111,
+  "valence" : 0.581,
+  "tempo" : 170.710,
+  "type" : "audio_features",
+  "id" : "0Sual1ICmnvv1bZ8IEZsS5",
+  "uri" : "spotify:track:0Sual1ICmnvv1bZ8IEZsS5",
+  "track_href" : "https://api.spotify.com/v1/tracks/0Sual1ICmnvv1bZ8IEZsS5",
+  "analysis_url" : "https://api.spotify.com/v1/audio-analysis/0Sual1ICmnvv1bZ8IEZsS5",
+  "duration_ms" : 89438,
+  "time_signature" : 4
+}
