@@ -21,11 +21,18 @@
 *** 
 
 * Stuff
+** Gracenote API ID
+   OnConnect API Package: Public Plan v1.1
+   Key: f3c8cxwsh42b4hbtnybc7utp
+   Applicationhighmood Key: f3c8cxwsh42b4hbtnybc7utp Status: active Created: 1 minute ago
+   Key Rate Limits
+   2	Calls per second
+   50	Calls per day
 
 ** Spotify API client ID
-   0813d30bd7ba4fb0aebadd2bd87b175e
+   0813d30bd7ba4f--------------
 ** OAuth Token
-   BQAvltxhcFX1Df5ieXYG6GXfxhI9rsaxabYWIRv-KY9CEpAa9DnVL8vAqottjTItcthZ-F1YrpolSRfj8ql00PjIb8Ofdm4WlpcjtoQmDv40k-judIMNHJYAOf41e4dwh6sZ3DEwEj2pEyrxlSJwTRU
+   BQAvltxhcFX1Df5ieXYG6GX---------------------------------------------------------------
    E.g. 
 *** curl -X "GET" "https://api.spotify.com/v1/me/player/recently-played?type=track&limit=0&after=1484811043508" -H "Accept: application/json" -H "Content-Type: application/json" -H "Authorization: Bearer BQAvltxhcFX1Df5ieXYG6GXfxhI9rsaxabYWIRv-KY9CEpAa9DnVL8vAqottjTItcthZ-F1YrpolSRfj8ql00PjIb8Ofdm4WlpcjtoQmDv40k-judIMNHJYAOf41e4dwh6sZ3DEwEj2pEyrxlSJwTRU"
     Gives [[file:test][this result]]. (Last 10 tracks)
