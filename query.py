@@ -52,19 +52,34 @@ def main(argv):
     query = argv[1]
     userid = str(argv[2])
     client = create_client('localhost', 8086)
-    total_time_spent(client, "1115081075") 
+    total_time_spent(client, userid) 
  
     options = {
         'topsongs': get_top_songs,
         'topgenres': get_top_genres,
         'timespent': total_time_spent,
     }
+    if query == 'timespent':
+        total_time_spent(client, userid, count)
     
-    options[query](client, userid)
+    if len(argv) != 4:
+        exit("""Usage: query.py <query> <userid> <count>
+topsongs: get the top <count> songs, leave count empty for a default of 10
+topgenres: get the top <count> genres, leave count empty for a default of 10""")
+
+    count = argv[3]
+    if query == 'topsongs':
+        get_top_songs(client, userid, count)
+    elif query == 'topgenres':
+        get_top_genres(client, userid, count)
+    return 0    
 
 if __name__ == "__main__":
-    if len(sys.argv != 3):
-        exit('Usage: query.py <query> <userid>')
+    if len(sys.argv) < 3 or sys.argv[1] == 'help':
+        exit("""Usage: query.py <query> <userid> <count>
+topsongs: get the top <count> songs, leave count empty for a default of 10
+topgenres: get the top <count> genres, leave count empty for a default of 10
+timespent: get the total time spent on spotify sampeled by timestamps of songs listened""")
     main(sys.argv)
 
     
