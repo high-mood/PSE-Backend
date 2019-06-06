@@ -54,15 +54,10 @@ def main(argv):
     client = create_client('localhost', 8086)
     total_time_spent(client, userid) 
  
-    options = {
-        'topsongs': get_top_songs,
-        'topgenres': get_top_genres,
-        'timespent': total_time_spent,
-    }
     if query == 'timespent':
-        total_time_spent(client, userid, count)
+        total_time_spent(client, userid)
     
-    if len(argv) != 4:
+    if len(argv) < 4:
         exit("""Usage: query.py <query> <userid> <count>
 topsongs: get the top <count> songs, leave count empty for a default of 10
 topgenres: get the top <count> genres, leave count empty for a default of 10""")
