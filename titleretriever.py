@@ -80,7 +80,7 @@ def get_track_features(token):
     # Retrieve song and artist from mp3 file. Loop over all 100 songs per dir.
     for folder in folders:
         for index in range(1,101):
-            mp3 = MP3File("./" + folder + "/" + str(index) + ".mp3")
+            mp3 = MP3File("./../songs/" + folder + "/" + str(index) + ".mp3")
             mp3.set_version(VERSION_2)
 
             # Retrieve song information from spotify
@@ -110,6 +110,7 @@ def match_moods_features(track_feature_dict):
 
     # translation table for indexes.
     trans_table = ["classical", "rock", "electronic", "pop"]
+    # List of features in json object.
     feature_set = ["duration_ms", "key", "mode", "time_signature", "acousticness",
         "danceability", "energy", "instrumentalness", "liveness", "loudness",
         "speechiness", "valence", "tempo"]
@@ -129,6 +130,7 @@ def match_moods_features(track_feature_dict):
         if( features is None):
             continue
 
+        # Write data to csv file.
         analyzed_tracks_csv.write(parts[0] + "," + parts[1] + "," + parts[2])
         for feature in feature_set:
             analyzed_tracks_csv.write("," + features[feature])
