@@ -4,6 +4,8 @@ from datetime import datetime
 import requests
 import sys
 
+# Retrieve data from spotify api
+
 '''
 Find song features for given song.
 
@@ -91,6 +93,47 @@ def get_track_features(token):
 
     return song_info
 
+# Match track features with moods.
+
+'''
+Match moods from previous analysises with spotifies metrics. Writes everything
+to a csv.
+
+Parameters:
+Dict that matches track id + genre to spotify metrics.
+'''
+def match_moods_features(track_feature_dict):
+    # CSV with moods.
+    moods_csv = open("moods.csv", "r")
+    # CSV to store results in.
+    analyzed_tracks_csv = open("analyzed_tracks.csv", "w+")
+
+    # translation table for indexes.
+    trans_table = ["classical", "rock", "electronic", "pop"]
+    feature_set = ["duration_ms", "key", "mode", "time_signature", "acousticness",
+        "danceability", "energy", "instrumentalness", "liveness", "loudness",
+        "speechiness", "valence", "tempo"]
+
+    for line in moods_csv:
+        # First item is number, second energy and finally happiness.
+        parts = line.split(",")
+
+        if (parts.len != 3):
+            # something is wrong with this line
+            print("Number of items in line is not 3?")
+            continue
+        
+        index = int(parts[0])        
+
+        features = track_feature_dict[trans_table[(index-1)/100 - 1]][((index-1) % 100) + 1]
+        if( features is None):
+            continue
+
+        analyzed_tracks_csv.write(parts[0] + "," + parts[1] + "," + parts[2])
+        for feature in feature_set:
+            analyzed_tracks_csv.write("," + features[feature])
+        analyzed_tracks_csv.write("\n")
+
 
 if __name__ == "__main__":
     token = sys.argv[1]
@@ -103,5 +146,6 @@ if __name__ == "__main__":
 
     user_id = r.json()["id"]
 
-    stuff = get_track_features(token)
-    print(stuff) # do something with the stuff
+    track_feature_dict = get_track_features(token)
+    match_moods_features(track_feature_dict)
+    
