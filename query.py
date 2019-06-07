@@ -2,6 +2,7 @@ from influxdb import InfluxDBClient
 import json
 import requests
 import sys
+import config
 
 def total_time_spent(client, userid):
     """Return the cumulative time spent listening to songs paired per timestamp."""
@@ -10,16 +11,18 @@ def total_time_spent(client, userid):
     timestamp, listen_time = [list(x) for x in list(zip(*cumsum))]
     return(timestamp, listen_time)
 
-def create_client(host, port):
+def create_client(host, port, username, password, database):
     """Create the connection to the influxdatabase songs."""
-    client = InfluxDBClient(host=host, port=port)
-    client.switch_database('songs')
+    client = InfluxDBClient(host=host, port=port, username=username,
+                            password=password, database=database)
     return client
 
 def get_genres(client, userid):
     """Return all genres listened to by the user."""
     result = client.query('select genres from "' + userid + '"').raw
-    timestamps, genres = [list(x) for x in list(zip(*result['series'][0]['values']))]
+    if len(results.keys()) == 0:
+        return None, None
+    _, genres = [list(x) for x in list(zip(*result['series'][0]['values']))]
     return timestamps, genres
 
 
@@ -32,13 +35,17 @@ def get_top(items, count):
 
 def get_top_genres(client, userid, count):
     """Get the top 'count' genres of user"""
-    genres = get_genres(client, userid)[1]
-    return(get_top(genres, count))
+    timestamps, genres = get_genres(client, userid)
+    if genres:
+        return(get_top(genres, count))
+    print('No genres found in database')
 
 
 def get_songs(client, userid, token):
     """Return all songs listened to by the user specified by userid."""
     result = client.query('select songid from "' + userid + '"').raw
+    if len(results.keys()) == 0:
+        return None, None
     timestamps, songs = [list(x) for x in list(zip(*result['series'][0]['values']))]
     ids = ",".join(songs[:10])
     endpoint = "https://api.spotify.com/v1/tracks?ids="
@@ -50,13 +57,17 @@ def get_songs(client, userid, token):
 def get_top_songs(client, userid, count, token):
     """Get the top 'count' songs of user"""
     _, songs = get_songs(client, userid, token)
-    return(get_top(songs, count))
+    if songs:
+        return(get_top(songs, count))
+    print('No songs found in database')
+
 
 
 def main(argv):
     query = argv[1]
     userid = str(argv[2])
-    client = create_client('localhost', 8086)
+    pswd = config.influxdb_pswd
+    client = create_client('localhost', 8086, 'highmood', pswd, 'songs')
 
     if query == 'timespent':
         total_time_spent(client, userid)
