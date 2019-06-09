@@ -19,6 +19,9 @@ Dict of dicts that hold song features.
 def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-features/"):
     r = requests.get(endpoint + id, headers={"Authorization": f"Bearer {token}"})
     audio_features = r.json()
+    
+    if(r.status_code != 200):
+        return None
 
     feature_set = {"duration_ms": audio_features["duration_ms"],
                     "key": audio_features["key"],
@@ -119,21 +122,22 @@ def match_moods_features(track_feature_dict):
         # First item is number, second energy and finally happiness.
         parts = line.split(",")
 
-        if (parts.len != 3):
+        if (len(parts) != 3):
             # something is wrong with this line
             print("Number of items in line is not 3?")
             continue
-        
-        index = int(parts[0])        
 
-        features = track_feature_dict[trans_table[(index-1)/100 - 1]][((index-1) % 100) + 1]
+        index = int(float(parts[0]))
+
+        features = track_feature_dict[trans_table[(int((index-1)/100 - 1))]].get(str(int(((index-1) % 100) + 1)), None)
+
         if( features is None):
             continue
 
         # Write data to csv file.
-        analyzed_tracks_csv.write(parts[0] + "," + parts[1] + "," + parts[2])
+        analyzed_tracks_csv.write(parts[0] + "," + parts[1] + "," + parts[2].strip())
         for feature in feature_set:
-            analyzed_tracks_csv.write("," + features[feature])
+            analyzed_tracks_csv.write("," + str(features[feature]))
         analyzed_tracks_csv.write("\n")
 
 
