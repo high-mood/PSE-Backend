@@ -1,3 +1,7 @@
+""" This python file reads moods.csv and the songs folder. Then it attempts to
+find the song on spotify, get its metrics and stores thse values in a csv called
+test_data.csv. On error the song is skipped."""
+
 from mp3_tagger import MP3File, VERSION_1, VERSION_2, VERSION_BOTH
 from time import sleep
 from datetime import datetime
