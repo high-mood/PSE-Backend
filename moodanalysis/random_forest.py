@@ -15,10 +15,8 @@ def read_data():
         csv_reader = csv.reader(csv_file, delimiter=',')
         rows_iter = iter(csv_reader)
 
-        # Add headers to both datasets.
-        headeres = next(rows_iter)
-        train_set.append(headeres)
-        test_set.append(headeres)
+        # Skip headers.
+        next(rows_iter)
 
         for rows in rows_iter:
             if(np.random.uniform(0, 1) <= TRAIN_RATIO):
@@ -29,7 +27,20 @@ def read_data():
     return train_set,test_set
 
 
+def somehypenameboi(train_set, test_set):
+    clf = RandomForestClassifier(n_jobs=2, random_state=0)
+    clf.fit([row[1:14] for row in train_set], [row[14] for row in train_set])
+
+    result = clf.predict([row[1:14] for row in test_set])
+    
+    for item in zip(result, [row[14] for row in train_set]):
+        print( "found: " + str(item[0]) + " correct is: " + str(item[1]))
+
+
+
 if __name__ == "__main__":
     # Set static seed and create test and train data
     np.random.seed(0)
     train_set, test_set = read_data()
+
+    somehypenameboi(train_set, test_set)
