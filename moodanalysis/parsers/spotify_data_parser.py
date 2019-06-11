@@ -111,9 +111,9 @@ Dict that matches track id + genre to spotify metrics.
 '''
 def match_moods_features(track_feature_dict):
     # CSV with moods.
-    moods_csv = open("./machinelearning/moods.csv", "r")
+    moods_csv = open("./../machinelearning/moods.csv", "r")
     # CSV to store results in.
-    analyzed_tracks_csv = open("./machinelearning/analyzed_tracks.csv", "w+")
+    analyzed_tracks_csv = open("./../machinelearning/analyzed_tracks.csv", "w+")
 
     # translation table for indexes.
     trans_table = ["classical", "rock", "electronic", "pop"]

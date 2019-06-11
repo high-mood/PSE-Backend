@@ -8,7 +8,7 @@ import csv
 
 data = []
 
-with open("./machinelearning/test_data.csv") as csv_file:
+with open("./../machinelearning/test_data.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     iterrows = iter(csv_reader)
 
@@ -33,7 +33,7 @@ with open("./machinelearning/test_data.csv") as csv_file:
         data.append(row)
 
 
-with open("./machinelearning/rf_data.csv", 'w', newline='') as output:
+with open("./../machinelearning/rf_data.csv", 'w', newline='') as output:
     writer = csv.writer(output)
     writer.writerows(data)
     

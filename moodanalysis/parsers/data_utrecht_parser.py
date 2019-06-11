@@ -4,7 +4,7 @@ algorithm for mood analysis. Another Python file supplied by Barry scrapes the s
 related to these tracks. In this way we can compare interviewees opinions to spotify's supplied parameters."""
 import csv
 
-with open('data.csv') as csv_file:
+with open('./../machinelearning/data.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     iterrows = iter(csv_reader)
     next(iterrows)
