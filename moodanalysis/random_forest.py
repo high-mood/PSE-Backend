@@ -12,7 +12,7 @@ Reads data from csv file and returns array of arrays containing that data
 def read_data():
     train_set = []
     test_set = []
-    with open('./machinelearning/rf_data_20.csv') as csv_file:
+    with open('./machinelearning/rf_data_' + sys.argv[1] +'.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         rows_iter = iter(csv_reader)
 
@@ -48,12 +48,17 @@ def random_forest(train_set, test_set):
 
 
 if __name__ == "__main__":
-    # input is the ratio.
-    if(len(sys.argv) > 1):
-        TRAIN_RATIO = float(sys.argv[1])
+    # First input is the lower bound on votes per song.
+    if(len(sys.argv) <2):
+        print('please give the vote lower bound')
+        exit()
+
+    # Second input is the train/test ratio (optional).
+    if(len(sys.argv) > 2):
+        TRAIN_RATIO = float(sys.argv[2])
 
     # Set static seed and create test and train data
     np.random.seed(0)
+    
     train_set, test_set = read_data()
-
     random_forest(train_set, test_set)
