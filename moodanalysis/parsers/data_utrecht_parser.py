@@ -4,6 +4,11 @@ algorithm for mood analysis. Another Python file supplied by Barry scrapes the s
 related to these tracks. In this way we can compare interviewees opinions to spotify's supplied parameters."""
 import csv
 from numpy import add
+import sys
+
+if(len(sys.argv) < 2):
+    print("Give lower bound on votes")
+    exit()
 
 data = []
 
@@ -12,6 +17,7 @@ with open('./../machinelearning/data.csv') as csv_file:
     iterrows = iter(csv_reader)
     next(iterrows)
     numericdata = []
+    
     #Iterate over all columns except text and map strings -> int
     for row in csv_reader:
         del row[1]
@@ -20,10 +26,12 @@ with open('./../machinelearning/data.csv') as csv_file:
         for i in range(10):
             row[i] = int(row[i])
         numericdata.append(row)
+
     list_count = 0
     new_data = [0 for i in range(13)]
     numberofresponses = [0 for i in range(401)]
-# Add together responses on same song
+
+    # Add together responses on same song
     for row in numericdata:
         gradesum = sum(row[1:])
         if gradesum == 0:
@@ -39,6 +47,6 @@ with open('./../machinelearning/data.csv') as csv_file:
             new_data = add(new_data,[value / gradesum for value in row[1:]])
             numberofresponses[list_count-1] += 1
 
-with open('./../machinelearning/moods_20.csv', 'w') as csv_file:
+with open('./../machinelearning/moods_' + sys.argv[1] +'.csv', 'w') as csv_file:
     csv_writer = csv.writer(csv_file, delimiter=',')
     csv_writer.writerows(data)

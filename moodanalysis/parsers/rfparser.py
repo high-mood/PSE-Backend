@@ -4,14 +4,15 @@ right corner is 7, the upper right corner is 63. The grid consists of 2.5 by 2.5
 blocks. This way we can use the data for a random forest algorithm."""
 
 # Size of blocks in grid, must devide 20
-SIZE = 10
+SIZE = 5
 
 from math import trunc
 import csv
+import sys
 
 data = []
 
-with open("./../machinelearning/parsed_data.csv") as csv_file:
+with open("./../machinelearning/analyzed_tracks_" + sys.argv[1] +".csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     iterrows = iter(csv_reader)
 
@@ -36,7 +37,7 @@ with open("./../machinelearning/parsed_data.csv") as csv_file:
         data.append(row)
 
 
-with open("./../machinelearning/rf_data.csv", 'w', newline='') as output:
+with open("./../machinelearning/rf_data_" + sys.argv[1] + ".csv", 'w', newline='') as output:
     writer = csv.writer(output)
     writer.writerows(data)
     

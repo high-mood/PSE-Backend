@@ -87,7 +87,7 @@ def get_track_features(token):
     # Retrieve song and artist from mp3 file. Loop over all 100 songs per dir.
     for folder in folders:
         for index in range(1,101):
-            mp3 = MP3File("./../songs/" + folder + "/" + str(index) + ".mp3")
+            mp3 = MP3File("./../../songs/" + folder + "/" + str(index) + ".mp3")
             mp3.set_version(VERSION_2)
 
             # Retrieve song information from spotify
@@ -111,9 +111,9 @@ Dict that matches track id + genre to spotify metrics.
 '''
 def match_moods_features(track_feature_dict):
     # CSV with moods.
-    moods_csv = open("./../machinelearning/moods.csv", "r")
+    moods_csv = open("./../machinelearning/moods_" + sys.argv[2] +"_translated.csv", "r")
     # CSV to store results in.
-    analyzed_tracks_csv = open("./../machinelearning/analyzed_tracks.csv", "w+")
+    analyzed_tracks_csv = open("./../machinelearning/analyzed_tracks_" + sys.argv[2] +".csv", "w+")
 
     # translation table for indexes.
     trans_table = ["classical", "rock", "electronic", "pop"]
@@ -121,6 +121,11 @@ def match_moods_features(track_feature_dict):
     feature_set = ["duration_ms", "key", "mode", "time_signature", "acousticness",
         "danceability", "energy", "instrumentalness", "liveness", "loudness",
         "speechiness", "valence", "tempo"]
+    
+    analyzed_tracks_csv.write("id,")
+    for item in feature_set:
+        analyzed_tracks_csv.write("," + item)
+    analyzed_tracks_csv.write("\n")
 
     for line in moods_csv:
         # First item is number, second energy and finally happiness.
@@ -146,6 +151,14 @@ def match_moods_features(track_feature_dict):
 
 
 if __name__ == "__main__":
+    if(len(sys.argv) < 2):
+        print("No token and lower bound for vote count given")
+        exit()
+
+    if(len(sys.argv) < 3):
+        print("No lower bound vote count given")
+        exit()
+    
     token = sys.argv[1]
 
     r = requests.get("https://api.spotify.com/v1/me", headers={"Authorization": f"Bearer {token}"})
@@ -153,8 +166,6 @@ if __name__ == "__main__":
         print(r.status_code)
         print(r.text)
         quit()
-
-    user_id = r.json()["id"]
 
     track_feature_dict = get_track_features(token)
     match_moods_features(track_feature_dict)
