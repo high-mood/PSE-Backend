@@ -3,12 +3,15 @@ happiness, energy tuple into an integer. The lower left corner is 0, the lower
 right corner is 7, the upper right corner is 63. The grid consists of 2.5 by 2.5 
 blocks. This way we can use the data for a random forest algorithm."""
 
+# Size of blocks in grid, must devide 20
+SIZE = 10
+
 from math import trunc
 import csv
 
 data = []
 
-with open("./../machinelearning/test_data.csv") as csv_file:
+with open("./../machinelearning/parsed_data.csv") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     iterrows = iter(csv_reader)
 
@@ -20,9 +23,9 @@ with open("./../machinelearning/test_data.csv") as csv_file:
     
     for row in csv_reader:
         # Computation to map points in grid.
-        x_result = min(int(trunc((float(row[1]) + 10.0) / 2.5)), 7)
-        y_result = min(int(trunc((float(row[2]) + 10.0) / 2.5)), 7)
-        location = 8 * y_result + x_result
+        x_result = min(int(trunc((float(row[1]) + 10.0) / SIZE)), int(20 / SIZE) - 1)
+        y_result = min(int(trunc((float(row[2]) + 10.0) / SIZE)), int(20 / SIZE) - 1)
+        location = int(20 / SIZE) * y_result + x_result
 
         # Delete redundant rows.
         del row[2]
