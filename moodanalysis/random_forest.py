@@ -1,9 +1,10 @@
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import csv
+import sys
 
 # Ratio of train / test items from dataset
-TRAIN_RATIO = 0.75
+TRAIN_RATIO = 0.6
 
 '''
 Reads data from csv file and returns array of arrays containing that data
@@ -11,7 +12,7 @@ Reads data from csv file and returns array of arrays containing that data
 def read_data():
     train_set = []
     test_set = []
-    with open('./machinelearning/rf_data.csv') as csv_file:
+    with open('./machinelearning/rf_data_20.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         rows_iter = iter(csv_reader)
 
@@ -47,6 +48,10 @@ def random_forest(train_set, test_set):
 
 
 if __name__ == "__main__":
+    # input is the ratio.
+    if(len(sys.argv) > 1):
+        TRAIN_RATIO = float(sys.argv[1])
+
     # Set static seed and create test and train data
     np.random.seed(0)
     train_set, test_set = read_data()
