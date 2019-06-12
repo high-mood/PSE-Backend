@@ -17,16 +17,19 @@ with open('./../machinelearning/data.csv') as csv_file:
         numericdata.append(row)
     data = []
     list_count = 0
+    new_data = [0 for i in range(13)]
     numberofresponses = [0 for i in range(401)]
     for row in numericdata:
         if row[0] > list_count:
-            data.append(row)
+            if(numberofresponses[list_count - 1] >= 20):
+                data.append(new_data)
+                new_data = [0 for i in range(13)]
             list_count += 1
             numberofresponses[list_count] += 1
         else:
             numberofresponses[list_count-1] += 1
             for i in range(13):
-                data[list_count-1][i+1] += row[i+1]
+                new_data[i] += row[i+1]
     for i in range(len(data)):
         print("Song: ")
         print(data[i][0])
