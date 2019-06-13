@@ -122,7 +122,7 @@ def match_moods_features(track_feature_dict):
         "danceability", "energy", "instrumentalness", "liveness", "loudness",
         "speechiness", "valence", "tempo"]
     
-    analyzed_tracks_csv.write("id,")
+    analyzed_tracks_csv.write("id,energy,happiness")
     for item in feature_set:
         analyzed_tracks_csv.write("," + item)
     analyzed_tracks_csv.write("\n")
