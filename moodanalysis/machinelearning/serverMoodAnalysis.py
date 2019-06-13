@@ -4,7 +4,7 @@ import numpy as np
 
 E_est = load('Trained-Energy.joblib')
 H_est = load('Trained-Happiness.joblib')
-features = ["key", "mode", "time_signature", "acousticness",
+features = ["mode", "time_signature", "acousticness",
         "danceability", "energy", "instrumentalness", "liveness", "loudness",
         "speechiness", "valence", "tempo"]
 
@@ -41,12 +41,11 @@ def analyseMood(songs):
 
     EnergyPredictions = E_est.predict(input)
     HappinessPredictions = H_est.predict(input)
-
-    for item in zip(songtitles, EnergyPredictions, HappinessPredictions):
+    for i in range(len(songtitles)):
         outputdata = {}
-        outputdata['songid'] = songtitles
-        outputdata['energy'] = EnergyPredictions
-        outputdata['happiness'] = HappinessPredictions
+        outputdata['songid'] = songtitles[i]
+        outputdata['energy'] = EnergyPredictions[i]
+        outputdata['happiness'] = HappinessPredictions[i]
         output.append(outputdata)
     return output
         
