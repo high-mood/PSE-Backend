@@ -38,7 +38,7 @@ with open('./../machinelearning/data.csv') as csv_file:
             gradesum = 1
 
         if row[0] > list_count:
-            if(numberofresponses[list_count - 1] >= 20):
+            if(numberofresponses[list_count - 1] >= int(sys.argv[1])):
                 data.append([row[0]] + [value / numberofresponses[list_count - 1] for value in new_data])
             new_data = [value / gradesum for value in row[1:]]
             list_count += 1
