@@ -1,4 +1,4 @@
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor as RFR
 import numpy as np
 import csv
 import sys
@@ -12,7 +12,7 @@ Reads data from csv file and returns array of arrays containing that data
 def read_data():
     train_set = []
     test_set = []
-    with open('./machinelearning/rf_data_' + sys.argv[1] +'.csv') as csv_file:
+    with open('./machinelearning/analyzed_tracks_' + sys.argv[1] +'.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         rows_iter = iter(csv_reader)
 
@@ -28,24 +28,21 @@ def read_data():
 
 
 def random_forest(train_set, test_set):
-    clf = RandomForestClassifier(n_jobs=2, n_estimators=10)
-    clf.fit([row[1:14] for row in train_set], [row[14] for row in train_set])
+    clf_energy = RFR(n_jobs=2, n_estimators=10)
+    clf_happiness = RFR(n_jobs=2, n_estimators=10)
 
-    result = clf.predict([row[1:14] for row in test_set])
-    succes = 0
-    failure = 0
-    
-    for item in zip(result, [row[14] for row in test_set]):
-        if(item[0] == item[1]):
-            succes += 1
-        else:
-            failure += 1
-            print("difference is " + str(int(item[1]) - int(item[0])))
+    clf_energy.fit([row[3:16] for row in train_set], [row[1] for row in train_set])
+    clf_happiness.fit([row[3:16] for row in train_set], [row[2] for row in train_set])
 
+    result_energy = clf_energy.predict([row[3:16] for row in test_set])
+    result_happiness = clf_happiness.predict([row[3:16] for row in test_set])
 
-    print("succes: " + str(succes))
-    print("failure: " + str(failure))
-
+    for i in range(len(test_set)):
+        print("energy_diff")
+        print(float(result_energy[i]) - float(test_set[i][1]))
+        print("happiness_diff")
+        print(float(result_happiness[i]) - float(test_set[i][2]))
+        print()
 
 if __name__ == "__main__":
     # First input is the lower bound on votes per song.
