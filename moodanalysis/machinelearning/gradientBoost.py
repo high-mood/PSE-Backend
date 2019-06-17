@@ -5,7 +5,7 @@ import csv
 from joblib import dump, load
 
 TRAIN_RATIO = 0.75
-data = ((np.array(np.loadtxt(open("analyzed_tracks_20.csv", "rb"), delimiter=",", skiprows=1)))).astype(float)
+data = ((np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1)))).astype(float)
 #Prepare training- and test-data
 trainset = []
 testset = []
