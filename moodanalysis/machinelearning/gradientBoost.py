@@ -1,11 +1,11 @@
 import numpy as np
-from sklearn.ensemble import GradientBoostingClassifier as GBC
+from sklearn.ensemble import GradientBoostingRegressor as GBR
 from sklearn.metrics import r2_score
 import csv
 from joblib import dump, load
 
 TRAIN_RATIO = 0.75
-data = ((np.array(np.loadtxt(open("analyzed_tracks_20.csv", "rb"), delimiter=",", skiprows=1)))*100).astype(int)
+data = ((np.array(np.loadtxt(open("analyzed_tracks_20.csv", "rb"), delimiter=",", skiprows=1)))).astype(float)
 #Prepare training- and test-data
 trainset = []
 testset = []
@@ -23,9 +23,9 @@ testdata = [elem[5:] for elem in testset]
 testE = [elem[1] for elem in testset]
 testH = [elem[2] for elem in testset]
 
-E_est = GBC(n_estimators=50, max_depth=3)
+E_est = GBR(n_estimators=50, max_depth=3)
 E_est.fit(traindata, energy)
-H_est = GBC(n_estimators=50, max_depth=3)
+H_est = GBR(n_estimators=50, max_depth=3)
 H_est.fit(traindata, happiness)
 
 dump(E_est, 'Trained-Energy.joblib')
