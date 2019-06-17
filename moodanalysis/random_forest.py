@@ -37,12 +37,17 @@ def random_forest(train_set, test_set):
     result_energy = clf_energy.predict([row[3:16] for row in test_set])
     result_happiness = clf_happiness.predict([row[3:16] for row in test_set])
 
+    energy_mean = 0.0
+    happiness_mean = 0.0
     for i in range(len(test_set)):
-        print("energy_diff")
-        print(float(result_energy[i]) - float(test_set[i][1]))
-        print("happiness_diff")
-        print(float(result_happiness[i]) - float(test_set[i][2]))
-        print()
+        energy_mean += abs(float(result_energy[i]) - float(test_set[i][1]))
+        happiness_mean += abs(float(result_happiness[i]) - float(test_set[i][2]))
+
+    energy_mean /= len(test_set)
+    happiness_mean /= len(test_set)
+
+    print("Avg discrepancy - Energy: " + str(energy_mean))
+    print("Avg discrepancy - Happiness: " + str(happiness_mean))
 
 if __name__ == "__main__":
     # First input is the lower bound on votes per song.
@@ -55,7 +60,7 @@ if __name__ == "__main__":
         TRAIN_RATIO = float(sys.argv[2])
 
     # Set static seed and create test and train data
-    np.random.seed(0)
+    # np.random.seed(0)
     
     train_set, test_set = read_data()
     random_forest(train_set, test_set)
