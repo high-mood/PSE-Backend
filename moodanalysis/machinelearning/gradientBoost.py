@@ -7,7 +7,7 @@ from joblib import dump, load
 on the server for mood analysis. This file is only used offline.'''
 
 TRAIN_RATIO = 0.75
-data = np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1))
+data = np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1, usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)))
 
 #Prepare training- and test-data
 trainset = []
@@ -19,22 +19,22 @@ for item in data:
     else:
         testset.append(item)
 
-energy = [elem[1] for elem in trainset]
-happiness = [elem[2] for elem in trainset]
-traindata = [elem[5:] for elem in trainset]
-testdata = [elem[5:] for elem in testset]
-testE = [elem[1] for elem in testset]
-testH = [elem[2] for elem in testset]
+energy = [elem[0] for elem in trainset]
+happiness = [elem[1] for elem in trainset]
+traindata = [elem[4:] for elem in trainset]
+testdata = [elem[4:] for elem in testset]
+testE = [elem[0] for elem in testset]
+testH = [elem[1] for elem in testset]
 
-# E_est = GBR(n_estimators=50, max_depth=3)
-# E_est.fit(traindata, energy)
-# H_est = GBR(n_estimators=50, max_depth=3)
-# H_est.fit(traindata, happiness)
+E_est = GBR(n_estimators=50, max_depth=3)
+E_est.fit(traindata, energy)
+H_est = GBR(n_estimators=50, max_depth=3)
+H_est.fit(traindata, happiness)
 
-#dump(E_est, 'Trained-Energy.joblib')
-#dump(H_est, 'Trained-Happiness.joblib')
-E_est = load('Trained-Energy.joblib')
-H_est = load('Trained-Happiness.joblib')
+dump(E_est, 'Trained-Energy.joblib')
+dump(H_est, 'Trained-Happiness.joblib')
+# E_est = load('Trained-Energy.joblib')
+# H_est = load('Trained-Happiness.joblib')
 E_pred = E_est.predict(testdata)
 H_pred = H_est.predict(testdata)
 
