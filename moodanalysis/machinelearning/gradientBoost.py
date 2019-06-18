@@ -3,9 +3,12 @@ from sklearn.ensemble import GradientBoostingRegressor as GBR
 import csv
 from joblib import dump, load
 
-TRAIN_RATIO = 0.75
+''' This script is used to train the Gradient Boosting Regressor. The .joblib files (trained data) are used
+on the server for mood analysis. This file is only used offline.'''
 
-data = ((np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1))))
+TRAIN_RATIO = 0.75
+data = np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1))
+
 #Prepare training- and test-data
 trainset = []
 testset = []
@@ -23,13 +26,15 @@ testdata = [elem[5:] for elem in testset]
 testE = [elem[1] for elem in testset]
 testH = [elem[2] for elem in testset]
 
-E_est = GBR(n_estimators=50, max_depth=3)
-E_est.fit(traindata, energy)
-H_est = GBR(n_estimators=50, max_depth=3)
-H_est.fit(traindata, happiness)
+# E_est = GBR(n_estimators=50, max_depth=3)
+# E_est.fit(traindata, energy)
+# H_est = GBR(n_estimators=50, max_depth=3)
+# H_est.fit(traindata, happiness)
 
-dump(E_est, 'Trained-Energy.joblib')
-dump(H_est, 'Trained-Happiness.joblib')
+#dump(E_est, 'Trained-Energy.joblib')
+#dump(H_est, 'Trained-Happiness.joblib')
+E_est = load('Trained-Energy.joblib')
+H_est = load('Trained-Happiness.joblib')
 E_pred = E_est.predict(testdata)
 H_pred = H_est.predict(testdata)
 
@@ -54,7 +59,7 @@ for i in range(len(testE)):
     # print('Estimated value: ')
     # print(H_pred[i])
     # print('\n')
-print(H_sum)
+    
 print("Avg discrepancy - Energy:")
 print(E_sum/len(testE))
 print("Avg discrepancy - Happiness:")
