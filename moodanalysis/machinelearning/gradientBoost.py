@@ -1,11 +1,11 @@
 import numpy as np
 from sklearn.ensemble import GradientBoostingRegressor as GBR
-from sklearn.metrics import r2_score
 import csv
 from joblib import dump, load
 
 TRAIN_RATIO = 0.75
-data = ((np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1)))).astype(float)
+
+data = ((np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1))))
 #Prepare training- and test-data
 trainset = []
 testset = []
@@ -30,15 +30,11 @@ H_est.fit(traindata, happiness)
 
 dump(E_est, 'Trained-Energy.joblib')
 dump(H_est, 'Trained-Happiness.joblib')
-#E_est = load('Trained-Energy.joblib')
-#H_est = load('Trained-Happiness.joblib')
 E_pred = E_est.predict(testdata)
 H_pred = H_est.predict(testdata)
 
 E_sum = 0
 H_sum = 0
-
-print(len(testset))
 
 for i in range(len(testE)):
     difE = abs(testE[i]-E_pred[i])
@@ -48,16 +44,16 @@ for i in range(len(testE)):
     E_sum += difE
     H_sum += difH
 
-    print('Actual Energy: ')
-    print(testE[i])
-    print('Estimated value: ')
-    print(E_pred[i])
-    print('\n')
-    print('Actual Happiness: ')
-    print(testH[i])
-    print('Estimated value: ')
-    print(H_pred[i])
-    print('\n')
+    # print('Actual Energy: ')
+    # print(testE[i])
+    # print('Estimated value: ')
+    # print(E_pred[i])
+    # print('\n')
+    # print('Actual Happiness: ')
+    # print(testH[i])
+    # print('Estimated value: ')
+    # print(H_pred[i])
+    # print('\n')
 print(H_sum)
 print("Avg discrepancy - Energy:")
 print(E_sum/len(testE))

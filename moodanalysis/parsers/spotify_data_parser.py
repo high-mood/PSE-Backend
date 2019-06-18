@@ -39,7 +39,8 @@ def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-fea
                     "loudness": audio_features["loudness"],
                     "speechiness": audio_features["speechiness"],
                     "valence": audio_features["valence"],
-                    "tempo": audio_features["tempo"]}
+                    "tempo": audio_features["tempo"],
+                    "id": audio_features["id"]}
 
     return feature_set
 
@@ -144,7 +145,7 @@ def match_moods_features(track_feature_dict):
             continue
 
         # Write data to csv file.
-        analyzed_tracks_csv.write(parts[0] + "," + parts[1] + "," + parts[2].strip())
+        analyzed_tracks_csv.write(features["id"] + "," + parts[1] + "," + parts[2].strip())
         for feature in feature_set:
             analyzed_tracks_csv.write("," + str(features[feature]))
         analyzed_tracks_csv.write("\n")
