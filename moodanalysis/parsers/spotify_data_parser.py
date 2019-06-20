@@ -66,7 +66,7 @@ def get_track_id(song_name, song_artist, token, endpoint="https://api.spotify.co
         quit()
 
     if len(track["tracks"]["items"]) > 0 and len(track["tracks"]) > 0:
-         return track["tracks"]["items"][0]["id"], song_name
+         return track["tracks"]["items"][0]["id"], song_name.replace(",", "")
     return None, None
 
 
