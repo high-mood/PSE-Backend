@@ -125,9 +125,10 @@ def match_moods_features(track_feature_dict):
         "danceability", "energy", "instrumentalness", "liveness", "loudness",
         "speechiness", "valence", "tempo", "name"]
     
-    analyzed_tracks_csv.write("id,energy,happiness")
+    analyzed_tracks_csv.write("songid,excitedness,happiness")
     for item in feature_set:
         analyzed_tracks_csv.write("," + item)
+    analyzed_tracks_csv.write(",response_count,response_excitedness,response_happiness")    
     analyzed_tracks_csv.write("\n")
 
     for line in moods_csv:
@@ -150,6 +151,8 @@ def match_moods_features(track_feature_dict):
         analyzed_tracks_csv.write(features["id"] + "," + parts[1] + "," + parts[2].strip())
         for feature in feature_set:
             analyzed_tracks_csv.write("," + str(features[feature]))
+
+        analyzed_tracks_csv.write(f",20,{parts[1]},{parts[2].strip()}")
         analyzed_tracks_csv.write("\n")
 
 
