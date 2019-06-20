@@ -66,8 +66,8 @@ def get_track_id(song_name, song_artist, token, endpoint="https://api.spotify.co
         quit()
 
     if len(track["tracks"]["items"]) > 0 and len(track["tracks"]) > 0:
-         return track["tracks"]["items"][0]["id"]
-    return None
+         return track["tracks"]["items"][0]["id"], song_name
+    return None, None
 
 
 '''
@@ -88,14 +88,16 @@ def get_track_features(token):
     # Retrieve song and artist from mp3 file. Loop over all 100 songs per dir.
     for folder in folders:
         for index in range(1,101):
-            mp3 = MP3File("./../../songs/" + folder + "/" + str(index) + ".mp3")
+            mp3 = MP3File("./../../../songs/" + folder + "/" + str(index) + ".mp3")
             mp3.set_version(VERSION_2)
 
             # Retrieve song information from spotify
-            id = get_track_id(mp3.song, mp3.artist, token)
+            id, song_name = get_track_id(mp3.song, mp3.artist, token)
             if(id != None):
                 # put audio features in dict.
-                song_info[folder][str(index)] = add_audio_features(id, token)
+                audio_features = add_audio_features(id, token)
+                audio_features["name"] = song_name
+                song_info[folder][str(index)] = audio_features
             # this sleep prevents the api from being queried too often.
             sleep(0.10)
 
@@ -121,7 +123,7 @@ def match_moods_features(track_feature_dict):
     # List of features in json object.
     feature_set = ["duration_ms", "key", "mode", "time_signature", "acousticness",
         "danceability", "energy", "instrumentalness", "liveness", "loudness",
-        "speechiness", "valence", "tempo"]
+        "speechiness", "valence", "tempo", "name"]
     
     analyzed_tracks_csv.write("id,energy,happiness")
     for item in feature_set:
