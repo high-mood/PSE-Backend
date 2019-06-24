@@ -41,5 +41,3 @@ with open("./../machinelearning/analyzed_tracks_" + sys.argv[1] +".csv") as csv_
 with open("./../machinelearning/rf_data_" + sys.argv[1] + ".csv", 'w', newline='') as output:
     writer = csv.writer(output)
     writer.writerows(data)
-    
-
