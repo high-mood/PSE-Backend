@@ -17,4 +17,3 @@ with open('./../machinelearning/moods_' + sys.argv[1] + '.csv') as csv_file:
 with open('./../machinelearning/moods_' + sys.argv[1] + '_translated.csv', "w") as out:
     output = csv.writer(out)
     output.writerows(outputdata)
-    
