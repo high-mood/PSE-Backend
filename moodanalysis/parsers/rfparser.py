@@ -16,6 +16,7 @@ with open("./../machinelearning/analyzed_tracks_" + sys.argv[1] +".csv") as csv_
     csv_reader = csv.reader(csv_file, delimiter=',')
     iterrows = iter(csv_reader)
 
+    # Make header for new file.
     titles = next(iterrows)
     del titles[2]
     del titles[1]
