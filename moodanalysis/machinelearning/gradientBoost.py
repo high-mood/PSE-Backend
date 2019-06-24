@@ -7,9 +7,10 @@ from joblib import dump, load
 on the server for mood analysis. This file is only used offline.'''
 
 TRAIN_RATIO = 0.75
-data = np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", skiprows=1, usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)))
+data = np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"), delimiter=",", 
+    skiprows=1, usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)))
 
-#Prepare training- and test-data
+# Prepare training- and test-data.
 trainset = []
 testset = []
 
@@ -31,13 +32,14 @@ E_est.fit(traindata, energy)
 H_est = GBR(n_estimators=50, max_depth=3)
 H_est.fit(traindata, happiness)
 
+# Create .joblib files to reuse the trained algorith later.
 dump(E_est, 'Trained-Energy.joblib')
 dump(H_est, 'Trained-Happiness.joblib')
-# E_est = load('Trained-Energy.joblib')
-# H_est = load('Trained-Happiness.joblib')
+
 E_pred = E_est.predict(testdata)
 H_pred = H_est.predict(testdata)
 
+# Determine absolute difference betweeen predictions and actual values.
 E_sum = 0
 H_sum = 0
 
@@ -48,17 +50,6 @@ for i in range(len(testE)):
     print(difH)
     E_sum += difE
     H_sum += difH
-
-    # print('Actual Energy: ')
-    # print(testE[i])
-    # print('Estimated value: ')
-    # print(E_pred[i])
-    # print('\n')
-    # print('Actual Happiness: ')
-    # print(testH[i])
-    # print('Estimated value: ')
-    # print(H_pred[i])
-    # print('\n')
     
 print("Avg discrepancy - Energy:")
 print(E_sum/len(testE))

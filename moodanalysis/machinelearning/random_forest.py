@@ -12,12 +12,15 @@ Reads data from csv file and returns array of arrays containing that data
 def read_data():
     train_set = []
     test_set = []
+
     with open('./machinelearning/analyzed_tracks_' + sys.argv[1] +'.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         rows_iter = iter(csv_reader)
 
         # Skip headers.
         next(rows_iter)
+
+        # Randomly create test and train sets.
         for rows in rows_iter:
             if(np.random.uniform(0, 1) <= TRAIN_RATIO):
                 train_set.append(rows)
@@ -31,12 +34,16 @@ def random_forest(train_set, test_set):
     clf_energy = RFR(n_jobs=2, n_estimators=10)
     clf_happiness = RFR(n_jobs=2, n_estimators=10)
 
+    # Fit the regressor models on the spotify statistics, fit them on the
+    # mood stats determined by another research project.
     clf_energy.fit([row[3:16] for row in train_set], [row[1] for row in train_set])
     clf_happiness.fit([row[3:16] for row in train_set], [row[2] for row in train_set])
 
     result_energy = clf_energy.predict([row[3:16] for row in test_set])
     result_happiness = clf_happiness.predict([row[3:16] for row in test_set])
 
+    # Compute the total absolute difference between the predicted and actual
+    # moods.
     energy_mean = 0.0
     happiness_mean = 0.0
     for i in range(len(test_set)):
