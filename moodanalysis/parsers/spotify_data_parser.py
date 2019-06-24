@@ -21,12 +21,14 @@ Return
 Dict of dicts that hold song features.
 '''
 def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-features/"):
+    # Get data from spotify.
     r = requests.get(endpoint + id, headers={"Authorization": f"Bearer {token}"})
     audio_features = r.json()
     
     if(r.status_code != 200):
         return None
 
+    # Return key features.
     feature_set = {"duration_ms": audio_features["duration_ms"],
                     "key": audio_features["key"],
                     "mode": audio_features["mode"],
@@ -57,7 +59,8 @@ Return:
 track identifier for spotify
 '''
 def get_track_id(song_name, song_artist, token, endpoint="https://api.spotify.com/v1/search"):
-
+    # Attempt to get track id by trying the first track in combination with 
+    # the artist.
     r = requests.get(endpoint + "?query=" + song_name.strip().replace(" ", "+") + "&type=track", headers={"Authorization": f"Bearer {token}"})
     track = r.json()
     if r.status_code != 200:
@@ -80,7 +83,6 @@ Return:
 Dict of dicts that contains the features for all songs.
 '''
 def get_track_features(token):
-
     # Hardcoded names of directories that containt he songs
     folders = ["classical", "rock", "pop", "electronic"]
     song_info = {folder: {} for folder in folders}
@@ -157,12 +159,14 @@ def match_moods_features(track_feature_dict):
 
 
 if __name__ == "__main__":
+    # Check input arguments, first should be token for spotify API.
     if(len(sys.argv) < 2):
         print("No token and lower bound for vote count given")
         exit()
 
+    # Check input arguments, second should be vote bound.
     if(len(sys.argv) < 3):
-        print("No lower bound vote count given")
+        print("No lower bound vote bount given")
         exit()
     
     token = sys.argv[1]
