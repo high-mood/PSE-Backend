@@ -12,9 +12,10 @@ def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-fea
     '''
     Find song features for given song.
 
-    Parameters:
-    id:     identifier of song
-    token:  oath token for spotify
+    Params:
+    id:         identifier of song
+    token:      oath token for spotify
+    endpoint:   spotify api adress, default is the audio-features api
 
     Return:
     Dict of dicts that hold song features.
@@ -52,6 +53,7 @@ def get_track_id(song_name, song_artist, token, endpoint="https://api.spotify.co
     song_name:    name of song
     song_artist:  main artist of song
     token:        oath token of spotify
+    endpoint:     spotify api adress, default is the search api
 
     Returns:
     Track identifier for spotify, song name
