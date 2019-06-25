@@ -8,12 +8,9 @@ import sys
 
 
 def parser(bound):
-    ''' The datafile from the University of Utrecht is parsed to a csv with the
-    average response for every song, where only songs with bound or more votes
-    are included.
-
-    Params:
-    bound: lower bound on vote count.
+    '''
+    Average the responses of research data, filter songs with low votecount.
+    :param bound: Lower bound on vote count.
     '''
     data = []
 

@@ -7,15 +7,9 @@ import sys
 TRAIN_RATIO = 0.6
 
 def read_data(bound):
-    ''' Read the input data from the analyzed_tracks_'bound'.csv file. Returns a train
-    and test set based on the data in this file.
-
-    params:
-    bound: lower bound on song reviews.
-
-    returns:
-    train_set: Data to train algorithm.
-    test_set: Data to test algorithm.
+    ''' Split data in two sets, a test and train set.
+    :param bound: lower bound on song reviews.
+    :return:Data to train algorithm, data to test algorithm
     '''
     train_set = []
     test_set = []

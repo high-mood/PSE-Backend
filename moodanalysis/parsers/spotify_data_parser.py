@@ -11,13 +11,10 @@ import sys
 def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-features/"):
     '''
     Find song features for given song.
-
-    Parameters:
-    id:     identifier of song
-    token:  oath token for spotify
-
-    Return:
-    Dict of dicts that hold song features.
+    :param id: Identifier of song
+    :param token: Oath token for spotify
+    :param endpoint: Spotify api adress, default is the audio-features api
+    :return: Dict of dicts that hold song features.
     '''
     # Get data from spotify.
     r = requests.get(endpoint + id, headers={"Authorization": f"Bearer {token}"})
@@ -47,14 +44,11 @@ def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-fea
 def get_track_id(song_name, song_artist, token, endpoint="https://api.spotify.com/v1/search"):
     '''
     Finds spotify song id for given song, returns None if data could not be found.
-
-    Params:
-    song_name:    name of song
-    song_artist:  main artist of song
-    token:        oath token of spotify
-
-    Returns:
-    Track identifier for spotify, song name
+    :param song_name: name of song
+    :param song_artist: main artist of song
+    :param token: oath token of spotify
+    :param endpoint: spotify api adress, default is the search api
+    :return: Track identifier for spotify, song name
     '''
     # Attempt to get track id by trying the first track in combination with 
     # the artist.
@@ -75,11 +69,9 @@ def get_track_features(token):
     '''
     Function that retrieves track features for songs in database.
 
-    Params:
-    token: oath token of spotify
+    :param token: Oath token of spotify
 
-    Return:
-    Dict of dicts that contains the features for all songs.
+    :return: Dict of dicts that contains the features for all songs.
     '''
 
     # Hardcoded names of directories that contain the songs.
@@ -106,11 +98,9 @@ def get_track_features(token):
 
 def match_moods_features(track_feature_dict):
     '''
-    Match moods from previous analysises with spotifies metrics. Writes everything
-    to a csv.
+    Match spotify data with metrics from research, write everythign to csv.
 
-    Params:
-    track_feature_dict: Dict that matches track id + genre to spotify metrics.
+    :param track_feature_dict: Dict of track id and spotify features.
     '''
 
     # CSV with moods.
