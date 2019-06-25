@@ -6,14 +6,21 @@ import sys
 # Ratio of train / test items from dataset
 TRAIN_RATIO = 0.6
 
-'''
-Reads data from csv file and returns array of arrays containing that data
-'''
-def read_data():
+def read_data(bound):
+    ''' Read the input data from the analyzed_tracks_'bound'.csv file. Returns a train
+    and test set based on the data in this file.
+
+    params:
+    bound: lower bound on song reviews.
+
+    returns:
+    train_set: Data to train algorithm.
+    test_set: Data to test algorithm.
+    '''
     train_set = []
     test_set = []
 
-    with open('./machinelearning/analyzed_tracks_' + sys.argv[1] +'.csv') as csv_file:
+    with open('./machinelearning/analyzed_tracks_' + str(bound) +'.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         rows_iter = iter(csv_reader)
 
@@ -31,6 +38,13 @@ def read_data():
 
 
 def random_forest(train_set, test_set):
+    ''' Creates, trains and tests a random forest regressor, then writes results
+    to terminal.
+
+    Params:
+    train_set: A list with training data.
+    test_set: A list with test data.
+    '''
     clf_energy = RFR(n_jobs=2, n_estimators=10)
     clf_happiness = RFR(n_jobs=2, n_estimators=10)
 
@@ -68,6 +82,7 @@ if __name__ == "__main__":
 
     # Set static seed and create test and train data
     # np.random.seed(0)
-    
-    train_set, test_set = read_data()
+    bound = int(sys.argv[1])
+
+    train_set, test_set = read_data(bound)
     random_forest(train_set, test_set)

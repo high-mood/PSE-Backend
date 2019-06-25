@@ -8,19 +8,17 @@ from datetime import datetime
 import requests
 import sys
 
-# Retrieve data from spotify api
-
-'''
-Find song features for given song.
-
-Parameters:
-id    - identifier of song
-token - oath token for spotify
-
-Return
-Dict of dicts that hold song features.
-'''
 def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-features/"):
+    '''
+    Find song features for given song.
+
+    Parameters:
+    id:     identifier of song
+    token:  oath token for spotify
+
+    Return:
+    Dict of dicts that hold song features.
+    '''
     # Get data from spotify.
     r = requests.get(endpoint + id, headers={"Authorization": f"Bearer {token}"})
     audio_features = r.json()
@@ -46,19 +44,18 @@ def add_audio_features(id, token, endpoint="https://api.spotify.com/v1/audio-fea
 
     return feature_set
 
-
-'''
-Finds spotify song id for given song, returns None if data could not be found.
-
-Parameters:
-song_name    - name of song
-song_artist  - main artist of song
-token        - oath token of spotify
-
-Return:
-track identifier for spotify
-'''
 def get_track_id(song_name, song_artist, token, endpoint="https://api.spotify.com/v1/search"):
+    '''
+    Finds spotify song id for given song, returns None if data could not be found.
+
+    Params:
+    song_name:    name of song
+    song_artist:  main artist of song
+    token:        oath token of spotify
+
+    Returns:
+    Track identifier for spotify, song name
+    '''
     # Attempt to get track id by trying the first track in combination with 
     # the artist.
     r = requests.get(endpoint + "?query=" + song_name.strip().replace(" ", "+") + "&type=track", headers={"Authorization": f"Bearer {token}"})
@@ -73,17 +70,19 @@ def get_track_id(song_name, song_artist, token, endpoint="https://api.spotify.co
     return None, None
 
 
-'''
-Function that retrieves track features for songs in database.
 
-Parameters:
-token - oath token of spotify
-
-Return:
-Dict of dicts that contains the features for all songs.
-'''
 def get_track_features(token):
-    # Hardcoded names of directories that containt he songs
+    '''
+    Function that retrieves track features for songs in database.
+
+    Params:
+    token: oath token of spotify
+
+    Return:
+    Dict of dicts that contains the features for all songs.
+    '''
+
+    # Hardcoded names of directories that contain the songs.
     folders = ["classical", "rock", "pop", "electronic"]
     song_info = {folder: {} for folder in folders}
 
@@ -105,19 +104,18 @@ def get_track_features(token):
 
     return song_info
 
-# Match track features with moods.
-
-'''
-Match moods from previous analysises with spotifies metrics. Writes everything
-to a csv.
-
-Parameters:
-Dict that matches track id + genre to spotify metrics.
-'''
 def match_moods_features(track_feature_dict):
+    '''
+    Match moods from previous analysises with spotifies metrics. Writes everything
+    to a csv.
+
+    Params:
+    track_feature_dict: Dict that matches track id + genre to spotify metrics.
+    '''
+
     # CSV with moods.
     moods_csv = open("./../machinelearning/moods_" + sys.argv[2] +"_translated.csv", "r")
-    # CSV to store results in.
+    # CSV to store results.
     analyzed_tracks_csv = open("./../machinelearning/analyzed_tracks_" + sys.argv[2] +".csv", "w+")
 
     # translation table for indexes.
@@ -137,25 +135,23 @@ def match_moods_features(track_feature_dict):
         # First item is number, second energy and finally happiness.
         parts = line.split(",")
 
+        # Data in csv is formatted wrong.
         if (len(parts) != 3):
-            # something is wrong with this line
             print("Number of items in line is not 3?")
             continue
 
+        # Match track id in csv with track in folder.
         index = int(float(parts[0]))
-
         features = track_feature_dict[trans_table[(int((index-1)/100 - 1))]].get(str(int(((index-1) % 100) + 1)), None)
 
-        if( features is None):
-            continue
+        if(not features is None):
+            # Write data to csv file.
+            analyzed_tracks_csv.write(features["id"] + "," + parts[1] + "," + parts[2].strip())
+            for feature in feature_set:
+                analyzed_tracks_csv.write("," + str(features[feature]))
 
-        # Write data to csv file.
-        analyzed_tracks_csv.write(features["id"] + "," + parts[1] + "," + parts[2].strip())
-        for feature in feature_set:
-            analyzed_tracks_csv.write("," + str(features[feature]))
-
-        analyzed_tracks_csv.write(f",20,{parts[1]},{parts[2].strip()}")
-        analyzed_tracks_csv.write("\n")
+            analyzed_tracks_csv.write(f",20,{parts[1]},{parts[2].strip()}")
+            analyzed_tracks_csv.write("\n")
 
 
 if __name__ == "__main__":
