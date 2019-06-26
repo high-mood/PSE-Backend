@@ -3,19 +3,22 @@ from sklearn.ensemble import GradientBoostingRegressor as GBR
 import csv
 from joblib import dump, load
 
+
 def main(TRAIN_RATIO):
-    ''' This script is used to train the Gradient Boosting Regressor. The .joblib files (trained data) are used
-    on the server for mood analysis. This file is only used offline.
+    ''' This script is used to train the Gradient Boosting Regressor. 
+    The .joblib files (trained data) are used on the server for
+    mood analysis. This file is only used offline.
     :param TRAIN_RATIO: Ratio used to train/test the data'''
 
     data = np.array(np.loadtxt(open("analyzed_tracks_1.csv", "rb"),
-                               delimiter=",", skiprows=1, usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15)))
+                               delimiter=",", skiprows=1, usecols=(1, 2, 3, 4, 5, 6, 7, 8, 9,
+                                                                   10, 11, 12, 13, 14, 15)))
 
     trainset = []
     testset = []
 
     for item in data:
-        if(np.random.uniform(0, 1) <= TRAIN_RATIO): 
+        if(np.random.uniform(0, 1) <= TRAIN_RATIO):
             trainset.append(item)
         else:
             testset.append(item)
@@ -53,4 +56,3 @@ def main(TRAIN_RATIO):
 
 if __name__ == "__main__":
     main(0.75)
-    
